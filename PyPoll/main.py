@@ -1,55 +1,43 @@
 import csv
-import os
+
+votes = 0
+candidates = []
+cand_votes = []
+
+filename = 'C:/Users/dshaf/Documents/School/Homework/homework/PyPoll/election_data.csv'
+
+with open(filename) as pypoll:
+	csv_reader = csv.reader(pypoll)
+	next(csv_reader, None)
+
+	for i in csv_reader:
+
+		votes +=1
+
+		if (i[2] in candidates):
+				cand_votes[candidates.index(i[2])] += 1
+		else:
+				candidates.append(i[2])
+				cand_votes.append(1)
+
+winner = candidates[cand_votes.index(max(cand_votes))]
+percents = [i*100/votes for i in cand_votes]
+
+pypoll = open('PyPollResults.txt','w')
+		
+print("Election Results")
+print("-----------------")
+print("Total Votes:", votes)
+print("-----------------")
+
+for d in range(0,len(candidates)) :
+
+	print(f'{candidates[d]}: {round(percents[d])}.000% ({cand_votes[d]}), file=pypoll)
+
+print("-------------------------", file=f)
+print(f'Winner: {winner}, file=f)
+print("-------------------------", file=f)
 
 
+pypoll.close()
 
-
-csv_file = 'budget_data.csv'
-profit = []
-row_count = 0
-difference = []
-months = []
-
-with open(csv_file) as hw:
-        csv_reader = csv.reader(hw)
-        next(csv_reader, None)
-
-
-
-        #row_count = sum(1 for row in csv_reader) Why does this cause my next loop not to be able to be able to be stepped into?
-
-        #get the number of months in the data
-        #get total amount of Profits/Losses
-        #get average change
-
-        for i in csv_reader:
-               
-                profit.append(int(i[1]))
-                row_count += 1
-                months.append(i[0])
-              
-        # for i in range(1,len(profit)):#Why doesn't this work?? It only returns the last difference on the list
-        #         difference = profit[i] - profit[i-1]
-        difference = [profit[i] - profit[i-1] for i in range(1,len(profit))]
-
-print("Total Months:", row_count)
-print("Total Profit: $", sum(profit))
-print("Average Change:", round(sum(difference) / (row_count-1),2))
-print("Greatest monthly increase: $", {months[difference.index(max(difference))+1]}, max(difference))
-print("Greatest monthly decrease: $", {months[difference.index(min(difference))+1]}, min(difference))
-
-hw = open('PyBankResults.txt', 'w')
-hw.close()
-	# for row in csv_reader:
-	# 	row_count += 1
-	# 	row_count = len(row_count)
-	# 	print(row_count)
-
-
-	# 	if line_count == 0:
-	# 		print(f'Column names are {", ".join(row)}')
-	# 		line_count +=1
-	# 	else:
-	# 		print(f'\t{row[0]} works in the {row[1]} department, and was born in {row[2]}.')
-	# 		line_count += 1
-	# print(f'Processed {line_count} lines.')
