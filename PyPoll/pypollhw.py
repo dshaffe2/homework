@@ -1,43 +1,70 @@
 import csv
-
-votes = 0
+filename = "C:/Users/dshaf/Documents/School/election_data.csv"
+totalvotes = 0
 candidates = []
-cand_votes = []
+candidate1count = 0
+candidate2count = 0
+candidate3count = 0
+candidate4count = 0
+cand1_per = 0
+cand2_per = 0
+cand3_per = 0
+cand4_per = 0
+counts = []
 
-filename = 'C:/Users/dshaf/Documents/School/Homework/homework/PyPoll/election_data.csv'
+with open(filename, 'r') as file:
+    data = csv.reader(file)
+    header = next(data)    
 
-with open(filename) as pypoll:
-	csv_reader = csv.reader(pypoll)
-	next(csv_reader, None)
+    for row in data:
+        totalvotes += 1
+        if row[2] not in candidates:
+            candidates.append(row[2])
+        if row[2] == candidates[0]:
+            candidate1count += 1
+        elif row[2] == candidates[1]:
+            candidate2count += 1
+        elif row[2] == candidates[2]:
+            candidate3count += 1
+        elif row[2] == candidates[3]:
+            candidate4count += 1
+    
+    counts = [candidate1count, candidate2count, candidate3count, candidate4count]
+    winner = candidates[counts.index(max(counts))]
 
-	for i in csv_reader:
-
-		votes +=1
-
-		if (i[2] in candidates):
-				cand_votes[candidates.index(i[2])] += 1
-		else:
-				candidates.append(i[2])
-				cand_votes.append(1)
-
-winner = candidates[cand_votes.index(max(cand_votes))]
-percents = [i*100/votes for i in cand_votes]
-
-pypoll = open('PyPollResults.txt','w')
-		
+cand1_per = round(float(candidate1count / totalvotes * 100), 3)     
+cand2_per = round(float(candidate2count / totalvotes * 100), 3)
+cand3_per = round(float(candidate3count / totalvotes * 100), 3)
+cand4_per = round(float(candidate4count / totalvotes * 100), 3)
+            
+   
+    
 print("Election Results")
-print("-----------------")
-print("Total Votes:", votes)
-print("-----------------")
+print("------------------------------")
+print(f"Total Votes: {totalvotes}")
+print("------------------------------")
+print(f"{candidates[0]}: {cand1_per}% ({candidate1count})")
+print(f"{candidates[1]}: {cand2_per}% ({candidate2count})")
+print(f"{candidates[2]}: {cand3_per}% ({candidate3count})")
+print(f"{candidates[3]}: {cand4_per}% ({candidate4count})")
+print("------------------------------")
+print(f"Winner: {winner}")
+print("------------------------------")
 
-for d in range(0,len(candidates)) :
-
-	print(f'{candidates[d]}: {round(percents[d])}.000% ({cand_votes[d]}), file=pypoll)
-
-print("-------------------------", file=f)
-print(f'Winner: {winner}, file=f)
-print("-------------------------", file=f)
 
 
-pypoll.close()
-
+filename = "C:/Users/dshaf/Documents/School/PythonHW_Take2/PyPoll/PyPoll_results.txt"
+with open(filename, 'w') as results:
+    csvwriter = csv.writer(results, delimiter = ' ')
+    
+    csvwriter.writerow("Election Results")
+    csvwriter.writerow("------------------------------")
+    csvwriter.writerow(f"Total Votes: {totalvotes}")
+    csvwriter.writerow("------------------------------")
+    csvwriter.writerow(f"{candidates[0]}: {cand1_per}% ({candidate1count})")
+    csvwriter.writerow(f"{candidates[1]}: {cand2_per}% ({candidate2count})")
+    csvwriter.writerow(f"{candidates[2]}: {cand3_per}% ({candidate3count})")
+    csvwriter.writerow(f"{candidates[3]}: {cand4_per}% ({candidate4count})")
+    csvwriter.writerow("------------------------------")
+    csvwriter.writerow(f"Winner: {winner}")
+    csvwriter.writerow("------------------------------")
